@@ -8,6 +8,5 @@ pandas
 pylint
 requests
 scikit-learn
-tensorflow-gpu
 tqdm
 yapf
