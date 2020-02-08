@@ -18,7 +18,7 @@ def scrap() -> None:
 
     baseurl = 'https://www.bigbasket.com/pd/'
     items = {}
-    for i in trange(266109, 266149):
+    for i in trange(40042542, 40052549):
 
         try:
             url = baseurl + str(i)

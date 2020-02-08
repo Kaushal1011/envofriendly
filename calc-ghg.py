@@ -59,6 +59,7 @@ def clean() -> None:
     plt.plot(range(len(cnts)), cnts)
     plt.grid()
     plt.show()
+    pickle.dump(cnts, open('cnts.pkl', 'wb'))
 
 
 if __name__ == '__main__':
