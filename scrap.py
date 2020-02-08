@@ -18,7 +18,7 @@ def scrap() -> None:
 
     baseurl = 'https://www.bigbasket.com/pd/'
     items = {}
-    for i in trange(40023473, 40023519):
+    for i in trange(266109, 266149):
 
         try:
             url = baseurl + str(i)
@@ -54,6 +54,4 @@ def scrap() -> None:
 
 
 if __name__ == '__main__':
-    items = scrap()
-    with open('items.pkl', 'wb') as f:
-        pickle.dump(items, f)
+    pickle.dump(scrap(), open('items-1.pkl', 'wb'))
