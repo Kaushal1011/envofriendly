@@ -215,10 +215,14 @@ def new_model(ing, about, category, score):
     inputB = layers.Input(shape=56, name='ing_model')
     inputC = layers.Input(shape=19, name='cat_model')
 
+    embedA = layers.Embedding(input_dim=91, output_dim=300,
+                              input_length=91)(inputA)
+    embedB = layers.Embedding(input_dim=56, output_dim=300,
+                              input_length=56)(inputB)
+
     hidden1 = layers.Dense(200,
                            activation='relu',
                            kernel_initializer='he_normal')(embedA)
-
     hidden2 = layers.Dense(100,
                            activation='relu',
                            kernel_initializer='he_normal')(hidden1)
@@ -230,40 +234,21 @@ def new_model(ing, about, category, score):
                            kernel_initializer='he_normal')(hidden3)
 
     about_ing_concat = layers.concatenate([hidden2, hidden4], axis=1)
+    hidden5 = layers.Dense(50,
+                           activation='relu',
+                           kernel_initializer='he_normal')(inputC)
+    about_ing_concat_flat = layers.Flatten()(about_ing_concat)
+    concat = layers.concatenate([about_ing_concat_flat, hidden5], axis=1)
+    final = layers.Dense(1,
+                         name='output',
+                         activation='relu',
+                         kernel_initializer='he_normal')(concat)
 
-    # about_model = models.Sequential()
-    # about_model.add(
-    #     layers.Embedding(input_dim=91, output_dim=300, input_length=91))
-    # about_model = layers.Input(shape=91, name='about_model')
-    # ing_model = layers.Input(shape=56, name='ing_model')
+    model = models.Model(inputs=[inputA, inputB, inputC], outputs=[final])
+    model.compile('rmsprop', 'mse', metrics=['accuracy'])
+    hist = model.fit([ing, about, category], score, epochs=500)
 
-    # x = layers.Dense(200, activation='relu', kernel_initializer='he_normal')(x)
-    # about_model_out = layers.Dense(100, activation='elu')(x)
-
-    # x = layers.Embedding(input_dim=56, output_dim=120,
-    #                      input_length=56)(ing_model)
-    # x = layers.Dense(120, activation='relu', kernel_initializer='he_normal')(x)
-    # ing_model_out = layers.Dense(100,
-    #                              activation='relu',
-    #                              kernel_initializer='he_normal')(x)
-
-    # about_ing_concat = layers.concatenate([about_model_out, ing_model_out],
-    #                                       axis=1)
-    # about_ing_concat = layers.Flatten()(about_ing_concat)
-
-    # cat_model = layers.Input(shape=[19], name='cat_model')
-
-    # final = layers.concatenate([cat_model, about_ing_concat], axis=-1)
-    # final = layers.Dense(1,
-    #                      name='output',
-    #                      activation='relu',
-    #                      kernel_initializer='he_normal')(final)
-
-    # model = models.Model(inputs=[about_model, ing_model, cat_model],
-    #                      outputs=[final])
-
-    # model.compile('rmsprop', 'mse', metrics=['accuracy'])
-    # hist = model.fit([ing, about, category], score, epochs=20)
+    return model
 
 
 def new() -> None:
