@@ -12,7 +12,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 from tensorflow.keras import layers, models
 from tensorflow.keras.preprocessing import text
-from tensorflow.keras.utils import plot_model, to_categorical
+from tensorflow.keras.utils import to_categorical, plot_model
 
 
 def preprocess(sentence: str) -> str:
@@ -72,33 +72,42 @@ def model(train: pd.DataFrame) -> models.Sequential:
     about_model = models.Sequential()
     about_model.add(
         layers.Embedding(input_dim=91, output_dim=200, input_length=91))
-    about_model.add(layers.Dense(100, activation='elu'))
+    about_model = layers.Input(shape=(91, ), name='about_model')
+    ing_model = layers.Input(shape=(56, ), name='ing_model')
 
-    ing_model = models.Sequential()
-    ing_model.add(
-        layers.Embedding(input_dim=56, output_dim=120, input_length=56))
-    ing_model.add(layers.Dense(100, activation='elu'))
+    x = layers.Embedding(input_dim=91, output_dim=200,
+                         input_length=91)(about_model)
+    x = layers.Dense(200, activation='elu')(x)
+    about_model_out = layers.Dense(100, activation='elu')(x)
+    # about_model.add(layers.Dense(200, activation='elu'))
 
-    merge_init = models.Sequential()
-    merge_init.add(layers.Concatenate([about_model, ing_model]))
-    merge_init.add(layers.Dense(100, activation='elu'))
+    x = layers.Embedding(input_dim=56, output_dim=120,
+                         input_length=56)(ing_model)
+    x = layers.Dense(120, activation='elu')(x)
+    ing_model_out = layers.Dense(100, activation='elu')(x)
 
-    cat_model = models.Sequential()
-    cat_model.add(layers.Dense(19, activation='elu'))
+    about_ing_concat = layers.concatenate([about_model_out, ing_model_out],
+                                          axis=1)
+    about_ing_concat = layers.Flatten()(about_ing_concat)
+    # about_ing_concat_1 = layers.Dense(160, activation='elu')(about_ing_concat)
+    print(about_ing_concat.shape)
+    # about_ing_concat = layers.Dense(19,
+    #                                 activation='elu',
+    #                                 name='about_ing_concat')(about_ing_concat)
 
-    merge_init1 = models.Sequential()
-    merge_init1.add(layers.Concatenate([merge_init, cat_model]))
+    cat_model = layers.Input(shape=(19, ), name='cat_model')
 
-    merge_init1.add(layers.Dense(1, activation='elu'))
+    # cat_model_out = layers.Dense(100, activation='elu')(cat_model)
+    # cat_model_out = layers.Dense(100, activation='elu',
+    #                              name='cat_model_out')(cat_model)
 
-    # about_model = layers.Input(shape=(91, ), name='about_model')
-    # ing_model = layers.Input(shape=(56, ), name='ing_model')
+    final = layers.concatenate([cat_model, about_ing_concat], axis=-1)
+    final = layers.Dense(1, name='output')(final)
 
     model = models.Model(inputs=[about_model, ing_model, cat_model],
-                         outputs=[merge_init1])
+                         outputs=[final])
 
-    model.compile(optimizer='rmsprop', loss='mse', metrics=['acc'])
-
+    model.compile('rmsprop', 'mse', metrics=['accuracy'])
     plot_model(model, to_file='model.png')
 
     return model
