@@ -14,7 +14,7 @@ class Product(models.Model):
 	productPrice = models.FloatField()
 	productAbout = models.TextField()
 	envScore = models.FloatField()
-    imageUrl = models.CharField(max_length=255)
+	imageUrl = models.CharField(max_length=255,default="")
     
 # class ProductBought(models.Field):
 # 	productId = models.IntegerField(blank=True,null=True)
