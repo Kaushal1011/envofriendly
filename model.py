@@ -77,32 +77,27 @@ def model(train: pd.DataFrame) -> models.Sequential:
 
     x = layers.Embedding(input_dim=91, output_dim=200,
                          input_length=91)(about_model)
-    x = layers.Dense(200, activation='elu')(x)
+    x = layers.Dense(200, activation='relu', kernel_initializer='he_normal')(x)
     about_model_out = layers.Dense(100, activation='elu')(x)
-    # about_model.add(layers.Dense(200, activation='elu'))
 
     x = layers.Embedding(input_dim=56, output_dim=120,
                          input_length=56)(ing_model)
-    x = layers.Dense(120, activation='elu')(x)
-    ing_model_out = layers.Dense(100, activation='elu')(x)
+    x = layers.Dense(120, activation='relu', kernel_initializer='he_normal')(x)
+    ing_model_out = layers.Dense(100,
+                                 activation='relu',
+                                 kernel_initializer='he_normal')(x)
 
     about_ing_concat = layers.concatenate([about_model_out, ing_model_out],
                                           axis=1)
     about_ing_concat = layers.Flatten()(about_ing_concat)
-    # about_ing_concat_1 = layers.Dense(160, activation='elu')(about_ing_concat)
-    print(about_ing_concat.shape)
-    # about_ing_concat = layers.Dense(19,
-    #                                 activation='elu',
-    #                                 name='about_ing_concat')(about_ing_concat)
 
     cat_model = layers.Input(shape=(19, ), name='cat_model')
 
-    # cat_model_out = layers.Dense(100, activation='elu')(cat_model)
-    # cat_model_out = layers.Dense(100, activation='elu',
-    #                              name='cat_model_out')(cat_model)
-
     final = layers.concatenate([cat_model, about_ing_concat], axis=-1)
-    final = layers.Dense(1, name='output')(final)
+    final = layers.Dense(1,
+                         name='output',
+                         activation='relu',
+                         kernel_initializer='he_normal')(final)
 
     model = models.Model(inputs=[about_model, ing_model, cat_model],
                          outputs=[final])
