@@ -167,9 +167,25 @@ def new() -> None:
 
     score = np.array([float(x) for x in score])
 
+    pickle.dump((about, ing, category, hist), open('points.pkl', 'wb'))
+
     mdl = new_model(about, ing, category, np.array(score))
-    mdl.save('model.h5')
+    mdl = models.load_model('model.h5')
+    # mdl.save('model.h5')
+
+
+def pipeline() -> None:
+    about = input()
+    ing = input()
+    category = input()
+    points = pickle.load(open('points.pkl', 'rb'), encoding='utf-8')
+    mdl = models.load_model('model.h5')
+
+    about = np.array(np.array(text.hashing_trick(preprocess(about), 91)))
+    ing = np.array(np.array(text.hashing_trick(preprocess(ing), 56)))
+    category = np.array(np.array(to_categorical(points[-1][category], 19)))
+    mdl.predict([ing, about, category])
 
 
 if __name__ == '__main__':
-    new()
+    pipeline()
