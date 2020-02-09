@@ -1,8 +1,10 @@
 import graphene
 from django.contrib.auth import get_user_model
-from graphene_django import DjangoObjectType
 from graphene import ObjectType
+from graphene_django import DjangoObjectType
+
 from .models import AppUser
+
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -36,6 +38,7 @@ class Mutation(graphene.ObjectType):
 
 class Mutation():
     create_user = CreateUser.Field()
+
 
 class Query(ObjectType):
     users = graphene.List(UserType)

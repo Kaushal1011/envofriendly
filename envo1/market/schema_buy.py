@@ -1,12 +1,15 @@
 import graphene
-from graphene_django import DjangoObjectType
-from .models import AppUser
 from django.db.models import Q
 from graphene import ObjectType
+from graphene_django import DjangoObjectType
+
+from .models import AppUser
+
 
 class AppUserType(DjangoObjectType):
     class Meta:
-        model=AppUser
+        model = AppUser
+
 
 class Query(ObjectType):
     # users = graphene.List(UserType)
@@ -20,7 +23,7 @@ class Query(ObjectType):
 class addInstance(graphene.Mutation):
 
     # user = graphene.Field(UserType)
-    # products = graphene.List(ProductType) 
+    # products = graphene.List(ProductType)
     app_users = graphene.List(AppUserType)
 
     class Arguments:
@@ -35,12 +38,13 @@ class addInstance(graphene.Mutation):
         # inst = AppUser(user=user, userId=userId, productsBought=productsBought, envScore=envScore)
         # inst.save()
 
-        curr_user=AppUser.objects.get(userId=userid)
-        curr_user.avgEnvScore+=envScore
+        curr_user = AppUser.objects.get(userId=userid)
+        curr_user.avgEnvScore += envScore
         curr_user.save()
         # curr_user.productsBought
 
         return None
+
 
 class Mutation(ObjectType):
     create_new_instance = addInstance.Field()
