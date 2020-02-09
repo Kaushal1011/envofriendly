@@ -2,6 +2,7 @@ import graphene
 from django.db.models import Q
 from graphene import ObjectType
 from graphene_django import DjangoObjectType
+from model import new_model
 
 from .models import Product
 
