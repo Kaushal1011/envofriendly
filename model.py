@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import csv
+import pickle
 import re
 import string
 from pprint import pprint
@@ -123,20 +125,24 @@ def ing_model(ing, score) -> None:
 
 
 def new() -> None:
-    import csv
+
     with open('dataset.csv', newline='') as csvfile:
         spamreader = csv.DictReader(csvfile)
         name = [row['name'] for row in spamreader]
 
+    with open('dataset.csv', newline='') as csvfile:
         spamreader = csv.DictReader(csvfile)
         ing = [row['ing'] for row in spamreader]
 
+    with open('dataset.csv', newline='') as csvfile:
         spamreader = csv.DictReader(csvfile)
         about = [row['about'] for row in spamreader]
 
+    with open('dataset.csv', newline='') as csvfile:
         spamreader = csv.DictReader(csvfile)
         category = [row['category'] for row in spamreader]
 
+    with open('dataset.csv', newline='') as csvfile:
         spamreader = csv.DictReader(csvfile)
         score = [row['score'] for row in spamreader]
 
@@ -162,6 +168,7 @@ def new() -> None:
     score = np.array([float(x) for x in score])
 
     mdl = new_model(about, ing, category, np.array(score))
+    mdl.save('model.h5')
 
 
 if __name__ == '__main__':
