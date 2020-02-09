@@ -43,13 +43,12 @@ class Product(models.Model):
 	# 	self.datetime=datetime.now()
 	# 	self.regularisedenvscore=envscore-0.01*distance
 
-
-
 class AppUser(models.Model):
 	user = models.OneToOneField(User, on_delete = models.CASCADE)
 	userId = models.AutoField(primary_key = True)
 	productsBought = JSONField(default="{}")
 	avgEnvScore=models.FloatField()
+
 
 
 class envoFriendly(models.Model):

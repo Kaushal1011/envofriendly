@@ -2,30 +2,7 @@ import graphene
 from django.contrib.auth import get_user_model
 from graphene_django import DjangoObjectType
 from graphene import ObjectType
-
-
-# class UserType(DjangoObjectType):
-#     class Meta:
-#         model = get_user_model()
-
-# class CreateUser(graphene.Mutation):
-#     user = graphene.Field(UserType)
-
-#     class Arguments:
-#         username = graphene.String(required=True)
-#         password = graphene.String(required=True)
-#         email = graphene.String(required=True)
-
-#     def mutate(self, info, username, password, email):
-#         user = get_user_model()(
-#             username = username,
-#             email = email,
-#         )
-#         user.set_password(password)
-#         user.save()
-
-#         return CreateUser(user=user)
-
+from .models import AppUser
 
 class UserType(DjangoObjectType):
     class Meta:
@@ -47,6 +24,8 @@ class CreateUser(graphene.Mutation):
         )
         user.set_password(password)
         user.save()
+        # AppUser(user=user,avgEnvScore=0)
+        # AppUser.save()
 
         return CreateUser(user=user)
 
