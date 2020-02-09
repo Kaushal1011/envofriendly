@@ -181,9 +181,11 @@ def pipeline() -> None:
     points = pickle.load(open('points.pkl', 'rb'), encoding='utf-8')
     mdl = models.load_model('model.h5')
 
-    about = np.array(np.array(text.hashing_trick(preprocess(about), 91)))
-    ing = np.array(np.array(text.hashing_trick(preprocess(ing), 56)))
-    category = np.array(np.array(to_categorical(points[-1][category], 19)))
+    about = np.array(text.hashing_trick(preprocess(about), 91))
+    ing = np.array(text.hashing_trick(preprocess(ing), 56))
+    category = np.array(to_categorical(points[-1][category], 19))
+    ing = sequence.pad_sequences(ing, maxlen=56, padding='post')
+    about = sequence.pad_sequences(about, maxlen=91, padding='post')
     mdl.predict([ing, about, category])
 
 
