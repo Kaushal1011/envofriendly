@@ -1,0 +1,35 @@
+.score{
+    text-align: center;
+    display: inline-block;
+    border-radius: 50%;
+    padding:2em;
+    border:1px rgb(39, 41, 39) solid;
+}
+.num{
+    font-size: 36px;
+    font-weight: 600;
+}
+.score .small{
+    display: block;
+    font-size: 70%;
+    color:rgb(49, 47, 43);
+}
+
+.num.red{
+    font-size: 36px;
+    font-weight: 600;
+    background-color: transparent;
+    color:hsl(0, 97%, 67%);
+}
+.num.green{
+    font-size: 36px;
+    font-weight: 600;
+    background-color: transparent;
+    color:#05AA0A;
+}
+.num.blue{font-size: 36px;
+    font-weight: 600;
+    background-color: transparent;
+    color:hsl(234, 96%, 67%);
+}
+

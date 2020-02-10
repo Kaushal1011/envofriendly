@@ -1,0 +1,12 @@
+beautifulsoup4
+bokeh
+django
+matplotlib
+mypy
+numpy
+pandas
+pylint
+requests
+scikit-learn
+tqdm
+yapf
