@@ -2,7 +2,8 @@ import graphene
 from django.db.models import Q
 from graphene import ObjectType
 from graphene_django import DjangoObjectType
-from model import new_model
+# from model import new_model, predict
+import random
 
 from .models import Product
 
@@ -71,7 +72,11 @@ class AddProduct(graphene.Mutation):
                about: str, imageurl: str):
         # Add predict method here
 
-        envscored = 3.141562789  # shere
+        # envscored = 3.14  # shere
+        # envscored = 1
+
+        envscored = random.randrange(2,5)
+
         prod = Product(productName=name,
                        productIngredients=ing,
                        productCategory=category,

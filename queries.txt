@@ -1,0 +1,81 @@
+QUERY: Fetch from DB
+
+query{
+    <class> (search parameters) {
+        <parameters>
+    }
+}
+
+MUTATE: Send to DB
+
+mutation {
+    <class> (input params)
+    {
+        <any one param>
+    }
+}
+
+e.g.: 
+1) Adding New User:
+mutation{
+  createUser (
+		email: "",
+    password: "",
+    username: ""
+  )
+  {
+    user{
+      id
+      username
+      password
+      email
+    }
+  }
+}
+
+2) Getting details of users: 
+
+query {
+  users {
+    id
+    email
+    username
+    password
+  }
+}
+
+3) Add a new product: 
+
+mutation {
+    addProduct (
+        name: "",
+        price: ,
+        about: "",
+        category: "",
+        ing: "",
+        imageurl: ""
+    )
+    {
+        id, 
+        name,
+        price,
+        about,
+        category,
+        ing,
+        imageurl
+    }
+}
+
+4) Get details of a product:
+
+query{
+  products{
+    productId,
+    productName,
+    productPrice,
+    productAbout,
+    productCategory,
+    productIngredients,
+  }
+}
+
